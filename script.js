@@ -8,7 +8,7 @@ const RESPONCE_STSTUS = localStorage.getItem("RESPONCE_STSTUS")
   ? localStorage.getItem("RESPONCE_STSTUS")
   : "";
 if (ACCESS_TOKEN == "" || USER_PHONE == "" || RESPONCE_STSTUS != 200) {
-  window.location.href = "/login.html";
+  window.location.href = "https://gatah-admin.alowairdi.com/login.html";
 }
 const URL = "https://darkgrey-viper-985923.hostingersite.com/api/v1/admin/";
 
@@ -28,7 +28,7 @@ async function getDataRequeset(type) {
   });
   console.log(response.status);
   if (response.status == 401 || response.status == 403) {
-    window.location.href = "/login.html";
+    window.location.href = "https://gatah-admin.alowairdi.com/login.html";
   }
   let data = await response.json();
 
