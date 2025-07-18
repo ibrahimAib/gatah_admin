@@ -1,3 +1,6 @@
+const FRONT_END = "http://127.0.0.1:5500";
+const API_URL = "https://gatah-api.alowairdi.com/api/v1/admin";
+
 const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN")
   ? `Bearer ${localStorage.getItem("ACCESS_TOKEN")}`
   : "";
@@ -8,9 +11,8 @@ const RESPONCE_STSTUS = localStorage.getItem("RESPONCE_STSTUS")
   ? localStorage.getItem("RESPONCE_STSTUS")
   : "";
 if (ACCESS_TOKEN == "" || USER_PHONE == "" || RESPONCE_STSTUS != 200) {
-  window.location.href = "https://gatah-admin.alowairdi.com/login.html";
+  window.location.href = `${FRONT_END}/login.html`;
 }
-const URL = "https://darkgrey-viper-985923.hostingersite.com/api/v1/admin/";
 
 let bill_requesets = [];
 let gatah_requesets = [];
@@ -19,16 +21,15 @@ let counter = 0;
 let title = "";
 
 async function getDataRequeset(type) {
-  const response = await fetch(`${URL}${type}`, {
+  const response = await fetch(`${API_URL}/${type}`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
       Authorization: ACCESS_TOKEN,
     },
   });
-  console.log(response.status);
   if (response.status == 401 || response.status == 403) {
-    window.location.href = "https://gatah-admin.alowairdi.com/login.html";
+    window.location.href = `${FRONT_END}/login.html`;
   }
   let data = await response.json();
 
@@ -50,7 +51,7 @@ function formatDate(data) {
 
 async function approveRequest(gatah_id, card) {
   let ticket_type = card.id[0] == "g" ? "approve-gatah" : "pay-bill";
-  const response = await fetch(`${URL}${ticket_type}/${gatah_id}`, {
+  const response = await fetch(`${URL}/${ticket_type}/${gatah_id}`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -90,46 +91,56 @@ async function loader() {
   document.getElementById("container").innerHTML = "";
   bill_requesets = await getDataRequeset("bill-request");
   gatah_requesets = await getDataRequeset("gatah-request");
+
   tickets = bill_requesets.concat(gatah_requesets);
+  console.log(tickets);
 
   tickets.forEach((ticket) => {
     let formated_date = formatDate(ticket.created_at);
+    let bill_start = `<div class="invoice" id="invoice"><h3>الفاتورة</h3><ul>`;
+    let bill_end = `</ul></div>`;
+    let the_bill = "";
+    let bill_element = `${bill_start}${the_bill}${bill_end}`;
 
     if (ticket.bill) {
       title = "فاتورة";
+
       ticket_id = `bill${ticket.id}`;
-      approve_button = `
-        <div class="card-footer">
-                <button type="button" class="approve-btn"  onClick="approveRequest(${ticket.bill_id},${ticket_id})">تأكيد</button>
-            </div>`;
+
+      approve_button = `<button onClick="approveRequest(${ticket.bill_id},${ticket_id})" class="accept-btn">تأخيد</button>`;
+
+      ticket.bill.forEach((item) => {
+        the_bill += `
+                        <li>${item.title} - ${item.price} ر.س</li>
+                    `;
+      });
+      bill_element = `${bill_start}${the_bill}${bill_end}`;
     } else {
       title = "قطة";
       ticket_id = `gatah${ticket.id}`;
-      approve_button = `
-        <div class="card-footer">
-                <button type="button" class="approve-btn"  onClick="approveRequest(${ticket.gatah_id},${ticket_id})">تأكيد</button>
-            </div>`;
+      approve_button = `<button onClick="approveRequest(${ticket.gatah_id},${ticket_id})" class="accept-btn">تأخيد</button>`;
     }
 
     if (ticket.status != "approved") {
       counter++;
-      container.innerHTML += `
-        <div class="card" id="${ticket_id}">
-            <div class="card-header">
-            <span class="user-name">${title}</span>
-            <span class="date">${formated_date}</span>
-            </div>
-            <div class="card-body">
-                <p> ${ticket.user_name}</p>
-                <p>المبلغ: ${ticket.price}</p>
-                <p>الحالة: ${
-                  ticket.status == "review" ? "غير مأكدة" : "مأكدة"
-                }</p>
-            </div>
-            
-                ${approve_button}
+      container.innerHTML += `    <div class="order-card" id="${ticket_id}">
+        <div class="order-header">
+            <span class="order-type">${title}</span>
+            <span class="order-date">${formated_date}</span>
         </div>
-    `;
+
+        <div class="order-info">
+            <h2 class="customer-name">${ticket.user_name}</h2>
+            <p class="order-price">السعر: ${ticket.price} ر.س</p>
+            <p class="order-status">الحالة: ${
+              ticket.status == "review" ? "غير مأكدة" : "مأكدة"
+            }</p>
+            ${approve_button}
+        </div>
+
+        ${bill_element}
+    </div>
+`;
     }
   });
   if (counter == 0) {
@@ -138,16 +149,13 @@ async function loader() {
   }
 }
 function logout() {
-  console.log("logout()");
-
   localStorage.removeItem("ACCESS_TOKEN");
   localStorage.removeItem("userphone");
   localStorage.removeItem("RESPONCE_STSTUS");
-  window.location.href = "https://gatah-admin.alowairdi.com/login.html";
+  window.location.href = `${FRONT_END}/login.html`;
 }
 loader();
 let intervalID;
-
 function startChecking() {
   // نشغل الـ setInterval فقط إذا ما كان شغال
   if (!intervalID) {
@@ -184,4 +192,4 @@ document.addEventListener("visibilitychange", () => {
 });
 
 // نشغل التحديث أول ما تفتح الصفحة
-startChecking();
+// startChecking();

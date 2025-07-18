@@ -19,15 +19,17 @@
         </form>
     </div>
     <script>
-        const login_URL = "https://darkgrey-viper-985923.hostingersite.com/api/login";
-        const FRONTEND_URL = "https://gatah-admin.alowairdi.com";
-
+        const FRONT_END = "http://127.0.0.1:5500";
+        const API_URL = "https://gatah-api.alowairdi.com/api/login";
+        if (localStorage.getItem("RESPONCE_STSTUS") == 200) {
+            window.location.href = `${FRONT_END}/index.html`;
+        }
         async function login() {
             let user_phone = document.getElementById('phone').value;
             let user_password = document.getElementById('password').value
             console.log(user_phone)
             console.log(user_password)
-            const response = await fetch(login_URL, {
+            const response = await fetch(API_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,8 +42,8 @@
             let data = await response.json();
             localStorage.setItem("ACCESS_TOKEN", data.token);
             localStorage.setItem("userphone", data.phone);
-            localStorage.setItem("RESPONCE_STSTUS", 200);
-            window.location.href = FRONTEND_URL;
+            localStorage.setItem("RESPONCE_STSTUS", response.status);
+            window.location.href = `${FRONT_END}/index.html`;
         }
     </script>
 </body>

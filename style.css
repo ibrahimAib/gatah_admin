@@ -1,17 +1,33 @@
+:root {
+    --main-bg: #2f3033;
+    --main-color: #3b3f42;
+    --accent: #3c3f42;
+    --text-color: #ffffff;
+    --input-bg: #4a4c4f;
+    --btn-color: #4672fe;
+}
+
 body{
+    direction: rtl;
+    font-family: 'Tahoma', sans-serif;
+    
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #1e2024;
-    height: 100vh;
+    background-color: var(--main-bg);
+
 }
+
 .header{
-  height: 70px;
+  position:sticky;
+  top: 0;
+  height: 80px;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.37);
+  background: linear-gradient(to bottom, rgb(0, 0, 0), rgba(0, 0, 0, 0));
   display: flex;
   align-items: center;
   padding: 0 10px 0 0;
@@ -27,54 +43,81 @@ body{
 .logout-btn img{
   width: 50px;
 }
-.container{
-    width: 80%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+
+
+
+
+
+.order-card {
+    background-color: var(--main-color);
+    border-radius: 20px;
+    box-shadow: 0 0 10px #00000030;
+    padding: 20px;
+    max-width: 400px;
+    margin-top: 10px;
 }
- .card {
-    width: 250px;
-    background-color: rgb(61, 61, 61);
-    border-radius: 9px;
-    padding: 15px;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-    font-family: Arial, sans-serif;
-    color: rgb(207, 207, 207);
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.order-info {
     margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: 20px;
-  }
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-  }
-  .card-body  {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .approve-btn {
-    padding: 8px 12px;
-    background-color: #4672fe;;
+}
+
+.customer-name {
+    font-size: 18px;
+    margin: 0 0 5px;
+    color: var(--text-color);
+}
+
+.order-price,
+.order-status {
+    margin: 5px 0;
+    color: var(--text-color);
+}
+
+.accept-btn {
+    background-color: var(--btn-color);
     color: white;
     border: none;
-    border-radius: 9px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
     cursor: pointer;
-    font-size: 20px;
-  }
-  .approve-btn:hover {
-    background-color: #3251b8;;
-  }
+    margin-top: 10px;
+}
 
-  .user-name{
-    font-size: 25px;
-  }
+.accept-btn:hover {
+    background-color: #345ae0;
+}
 
+.invoice {
+    margin-top: 15px;
+    border-top: 1px solid #555;
+    padding-top: 10px;
+}
+
+.invoice h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.invoice ul {
+    padding: 0;
+    list-style: none;
+}
+
+.invoice li {
+    padding: 4px 0;
+    font-size: 14px;
+    color: var(--text-color);
+}
 @media screen and (max-width: 600px) {
     .container{
         width: 95%;
