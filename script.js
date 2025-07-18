@@ -21,25 +21,32 @@ let counter = 0;
 let title = "";
 
 async function getDataRequeset(type) {
-  const response = await fetch(`${API_URL}/${type}`, {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-      Authorization: ACCESS_TOKEN,
-    },
-  });
-  if (response.status == 401 || response.status == 403) {
-    window.location.href = `${FRONT_END}/login.html`;
-  }
-  let data = await response.json();
+  try {
+    const response = await fetch(`${API_URL}/${type}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: ACCESS_TOKEN,
+      },
+    });
+    if (response.status == 401 || response.status == 403) {
+      localStorage.removeItem("ACCESS_TOKEN");
+      localStorage.removeItem("userphone");
+      localStorage.removeItem("RESPONCE_STSTUS");
+      window.location.href = `${FRONT_END}/login.html`;
+    }
+    let data = await response.json();
 
-  return data.data;
+    return data.data;
+  } catch (error) {
+    console.log(`getDataRequest has problem ${error}`);
+  }
 }
 function formatDate(data) {
   const date = new Date(data);
 
   const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // month is 0-based
+  const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
 
   const hours = String(date.getHours()).padStart(2, "0");
@@ -51,35 +58,37 @@ function formatDate(data) {
 
 async function approveRequest(gatah_id, card) {
   let ticket_type = card.id[0] == "g" ? "approve-gatah" : "pay-bill";
-  const response = await fetch(`${API_URL}/${ticket_type}/${gatah_id}`, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-      Authorization: ACCESS_TOKEN,
-    },
-  });
-  if (response.ok) {
-    const card_const = document.getElementById(card.id);
-    if (card_const) {
-      // أضف كلاس الفيد أوت
-      card_const.classList.add("fadeout");
+  try {
+    const response = await fetch(`${API_URL}/${ticket_type}/${gatah_id}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: ACCESS_TOKEN,
+      },
+    });
+    if (response.ok) {
+      const card_const = document.getElementById(card.id);
+      if (card_const) {
+        card_const.classList.add("fadeout");
 
-      // بعد انتهاء الأنيميشن أخفِ العنصر تمامًا أو أزِله
-      card_const.addEventListener(
-        "animationend",
-        () => {
-          card_const.remove(); // أو card_const.remove();
-        },
-        { once: true }
-      );
-      counter--;
-      if (counter == 0) {
-        let container = document.getElementById("container");
+        card_const.addEventListener(
+          "animationend",
+          () => {
+            card_const.remove();
+          },
+          { once: true }
+        );
+        counter--;
+        if (counter == 0) {
+          let container = document.getElementById("container");
 
-        container.innerHTML = `<span class="message">لا يوجد طلبات</span>`;
-        container.classList.add("container_message");
+          container.innerHTML = `<span class="message">لا يوجد طلبات</span>`;
+          container.classList.add("container_message");
+        }
       }
     }
+  } catch (error) {
+    console.log(`approveRequest has problem ${error}`);
   }
 }
 
@@ -89,9 +98,10 @@ async function loader() {
   let approve_button = "";
   let ticket_id = "";
   document.getElementById("container").innerHTML = "";
-  bill_requesets = await getDataRequeset("bill-request");
-  gatah_requesets = await getDataRequeset("gatah-request");
-
+  [bill_requesets, gatah_requesets] = await Promise.all([
+    getDataRequeset("bill-request"),
+    getDataRequeset("gatah-request"),
+  ]);
   tickets = bill_requesets.concat(gatah_requesets);
 
   tickets.forEach((ticket) => {
@@ -190,5 +200,4 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-// نشغل التحديث أول ما تفتح الصفحة
-// startChecking();
+startChecking();
