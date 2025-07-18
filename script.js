@@ -93,7 +93,6 @@ async function loader() {
   gatah_requesets = await getDataRequeset("gatah-request");
 
   tickets = bill_requesets.concat(gatah_requesets);
-  console.log(tickets);
 
   tickets.forEach((ticket) => {
     let formated_date = formatDate(ticket.created_at);
