@@ -1,4 +1,4 @@
-const FRONT_END = "http://127.0.0.1:5500";
+const FRONT_END = "https://gatah-admin.alowairdi.com";
 const API_URL = "https://gatah-api.alowairdi.com/api/v1/admin";
 
 const ACCESS_TOKEN = localStorage.getItem("ACCESS_TOKEN")
