@@ -54,7 +54,7 @@ body{
     padding: 20px;
     max-width: 400px;
     min-width: 200px;
-    margin: 10px;
+    margin: 5px;
 }
 
 .order-header {
@@ -143,12 +143,20 @@ body{
 
 }   
 @media screen and (min-width: 900px) {
-.container{
-    width: 95%;
-    display: grid;
-    grid-template-columns: 30% 30% 30%;
+    .container{
+        width: 95%;
+        display: grid;
+        grid-template-columns: 30% 30% 30%;
 
-}
+    }
+}   
+@media screen and (min-width: 1200px) {
+    .container{
+        width: 95%;
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+
+    }
 }   
 
 .message{
