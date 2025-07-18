@@ -10,7 +10,6 @@
 body{
     direction: rtl;
     font-family: 'Tahoma', sans-serif;
-    
     color: var(--text-color);
     margin: 0;
     padding: 0;
@@ -30,14 +29,14 @@ body{
   background: linear-gradient(to bottom, rgb(0, 0, 0), rgba(0, 0, 0, 0));
   display: flex;
   align-items: center;
-  padding: 0 10px 0 0;
+  padding: 10px 0 10px 0;
 }
 .logout-btn{
   padding: 10px;
 }
 .logout-btn:hover{
   cursor: pointer;
-  background-color: #1e2024;
+  background: radial-gradient(circle, #141518, rgba(0, 128, 0, 0));
   border-radius: 20px;
 }
 .logout-btn img{
@@ -54,7 +53,8 @@ body{
     box-shadow: 0 0 10px #00000030;
     padding: 20px;
     max-width: 400px;
-    margin-top: 10px;
+    min-width: 200px;
+    margin: 10px;
 }
 
 .order-header {
@@ -118,13 +118,36 @@ body{
     font-size: 14px;
     color: var(--text-color);
 }
+.container{
+    width: 95%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+}
 @media screen and (max-width: 600px) {
     .container{
         width: 95%;
+        display: flex;
+        flex-direction: column;
     }
-    .card{
-        width: 90%;
-        height: 300px;
+    .order-card {
+    background-color: var(--main-color);
+    border-radius: 20px;
+    box-shadow: 0 0 10px #00000030;
+    padding: 20px;
+    max-width: 400px;
+    min-width: 300px;
+    margin: none;
+    margin-top: 10px;
+    }
+
+}   
+@media screen and (min-width: 900px) {
+.container{
+    width: 95%;
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+
 }
 }   
 
@@ -193,3 +216,6 @@ body{
         color: white;
         cursor: pointer;
     }
+.text-color{
+    color: #FFA726;
+}

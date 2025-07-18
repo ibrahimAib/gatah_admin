@@ -97,7 +97,7 @@ async function loader() {
 
   tickets.forEach((ticket) => {
     let formated_date = formatDate(ticket.created_at);
-    let bill_start = `<div class="invoice" id="invoice"><h3>الفاتورة</h3><ul>`;
+    let bill_start = `<div class="invoice " id="invoice"><h3 class="text-color">تفاصيل الفاتورة:</h3><ul>`;
     let bill_end = `</ul></div>`;
     let the_bill = "";
     let bill_element = `${bill_start}${the_bill}${bill_end}`;
@@ -107,7 +107,7 @@ async function loader() {
 
       ticket_id = `bill${ticket.id}`;
 
-      approve_button = `<button onClick="approveRequest(${ticket.bill_id},${ticket_id})" class="accept-btn">تأخيد</button>`;
+      approve_button = `<button onClick="approveRequest(${ticket.bill_id},${ticket_id})" class="accept-btn">تم</button>`;
 
       ticket.bill.forEach((item) => {
         the_bill += `
@@ -118,14 +118,14 @@ async function loader() {
     } else {
       title = "قطة";
       ticket_id = `gatah${ticket.id}`;
-      approve_button = `<button onClick="approveRequest(${ticket.gatah_id},${ticket_id})" class="accept-btn">تأخيد</button>`;
+      approve_button = `<button onClick="approveRequest(${ticket.gatah_id},${ticket_id})" class="accept-btn">تم</button>`;
     }
 
     if (ticket.status != "approved") {
       counter++;
-      container.innerHTML += `    <div class="order-card" id="${ticket_id}">
+      container.innerHTML += `    <div class="order-card text-color" id="${ticket_id}">
         <div class="order-header">
-            <span class="order-type">${title}</span>
+            <span class="order-type text-color">${title}</span>
             <span class="order-date">${formated_date}</span>
         </div>
 
@@ -138,7 +138,7 @@ async function loader() {
             ${approve_button}
         </div>
 
-        ${bill_element}
+        ${ticket.bill ? bill_element : ""}
     </div>
 `;
     }
