@@ -51,7 +51,7 @@ function formatDate(data) {
 
 async function approveRequest(gatah_id, card) {
   let ticket_type = card.id[0] == "g" ? "approve-gatah" : "pay-bill";
-  const response = await fetch(`${URL}/${ticket_type}/${gatah_id}`, {
+  const response = await fetch(`${API_URL}/${ticket_type}/${gatah_id}`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
